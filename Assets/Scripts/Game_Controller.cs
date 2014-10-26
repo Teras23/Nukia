@@ -35,28 +35,35 @@ public class Game_Controller : MonoBehaviour {
 	}
 
 	void UpdateText() {
-		healthText.text = phone.GetComponent<Phone>().health + "/" + phone.GetComponent<Phone>().maxHealth + "hp";
+		healthText.text = phone.GetComponent<Phone>().getHealth() + "/" + phone.GetComponent<Phone>().maxHealth + "hp";
 		moneyText.text = "Money: " + money;
 	}
 
 	void UpdatePhone() {
-		phone.GetComponent<Phone>().health = phones[selectedPhone].GetComponent<Phone>().health;
+		phone.GetComponent<Phone>().setHealth(phones[selectedPhone].GetComponent<Phone>().getHealth());
 		phone.GetComponent<Phone>().maxHealth = phones[selectedPhone].GetComponent<Phone>().maxHealth;
 		phone.GetComponent<Phone>().value = phones[selectedPhone].GetComponent<Phone>().value;
-		phone.GetComponent<Image>().sprite = phones[selectedPhone].GetComponent<Image>().sprite;
-		phone.GetComponent<Image>().color = phones[selectedPhone].GetComponent<Image>().color;
+		phone.GetComponent<Image>().sprite = phones[selectedPhone].GetComponent<Phone>().image;
 	}
 
 	public void NextPhone() {
-		selectedPhone = 1;
-		UpdatePhone();
-		UpdateText();
+		if(selectedPhone + 1 < phones.Length) {
+			if(phones[selectedPhone + 1] != null) {
+				selectedPhone += 1;
+				UpdatePhone();
+				UpdateText();
+			}
+		}
 	}
 
 	public void PrevoiusPhone() {
-		selectedPhone = 0;
-		UpdatePhone();
-		UpdateText();
+		if(selectedPhone - 1 >= 0) {
+			if(phones[selectedPhone - 1] != null) {
+				selectedPhone -= 1;
+				UpdatePhone();
+				UpdateText();
+			}
+		}
 	}
 
 	public void Click() {
@@ -90,5 +97,17 @@ public class Game_Controller : MonoBehaviour {
 		achevementsCanvas.gameObject.SetActive(false);
 		upgradesCanvas.gameObject.SetActive(false);
 		mainScreenCanvas.gameObject.SetActive(true);
+	}
+
+	void OnApplicationFocus(bool focusStatus) {
+		if(focusStatus) {
+			//Set up loading files
+		}
+	}
+
+	void OnApplicationPause(bool pauseStatus) {
+		if(pauseStatus) {
+			//Set up saving files 
+		}
 	}
 }

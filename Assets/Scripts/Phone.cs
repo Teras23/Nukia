@@ -4,12 +4,12 @@ using System.Collections;
 public class Phone : MonoBehaviour {
 
 	public string phoneName;
-	public int maxHealth;
-	[HideInInspector]
-	public int health;
+	public Sprite image;
 	public int value;
+	public int maxHealth;
+	public int health;
 
-	void Start() {
+	void Awake() {
 		health = maxHealth;
 	}
 
@@ -21,6 +21,14 @@ public class Phone : MonoBehaviour {
 
 	public void OnDeath(Game_Controller g) {
 		g.money += value;
-		Start();
+		Awake();
+	}
+
+	public int getHealth() {
+		return health;
+	}
+
+	public void setHealth(int h) {
+		health = h;
 	}
 }
