@@ -25,7 +25,8 @@ public class Game_Controller : MonoBehaviour {
 		UpdateText();
 		OpenMainScreen();
 		Screen.SetResolution(Screen.width, Screen.height, false);
-		//phone = phones[0];
+		Load();
+		UpdateText();
 	}
 
 	void Update() {
@@ -101,13 +102,33 @@ public class Game_Controller : MonoBehaviour {
 
 	void OnApplicationFocus(bool focusStatus) {
 		if(focusStatus) {
-			//Set up loading files
+			Load();
 		}
 	}
 
 	void OnApplicationPause(bool pauseStatus) {
 		if(pauseStatus) {
-			//Set up saving files 
+			Save();
+		}
+	}
+
+	void OnApplicationQuit() {
+		Save();
+	}
+
+	public void Save() {
+		PlayerPrefs.SetInt("Money", money);
+		PlayerPrefs.Save();
+	}
+
+	public void Load() {
+		if(PlayerPrefs.HasKey("Money")) {
+			money = PlayerPrefs.GetInt("Money");
+		}
+		else {
+			PlayerPrefs.SetInt("Money", 0);
+			PlayerPrefs.Save();
+			print("set0");
 		}
 	}
 }
