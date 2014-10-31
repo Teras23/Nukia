@@ -9,19 +9,19 @@ public class Phone : MonoBehaviour {
 	public int maxHealth;
 	public int health;
 
-	void Awake() {
+	void Start() {
 		health = maxHealth;
 	}
 
-	public void Damage(int a, Game_Controller g) {
+	public void Damage(int a) {
 		health -= a;
 		if(health <= 0)
-			OnDeath(g);
+			OnDeath();
 	}
 
-	public void OnDeath(Game_Controller g) {
-		g.money += value;
-		Awake();
+	public void OnDeath() {
+		GameController.game.AddMoney(value);
+		Start();
 	}
 
 	public int getHealth() {

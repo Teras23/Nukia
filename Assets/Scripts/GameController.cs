@@ -2,10 +2,13 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class Game_Controller : MonoBehaviour {
+public class GameController : MonoBehaviour {
+
+	public static GameController game;
 
 	public int money;
 	public GameObject[] phones;
+	public GameObject[] weapons;
 
 	public Text damageText;
 	public Text healthText;
@@ -17,14 +20,15 @@ public class Game_Controller : MonoBehaviour {
 	public Canvas upgradesCanvas;
 	public Canvas mainScreenCanvas;
 
-	public GameObject phone;
+	public GameObject phoneImage;
 	private int selectedPhone = 0;
 	
 	void Start() {
+		Screen.SetResolution(Screen.width, Screen.height, false);
+		game = this;
 		money = 0;
 		UpdateText();
 		OpenMainScreen();
-		Screen.SetResolution(Screen.width, Screen.height, false);
 		Load();
 		UpdateText();
 	}
@@ -35,16 +39,40 @@ public class Game_Controller : MonoBehaviour {
 		}
 	}
 
+	void FixedUpdate() {
+
+	}
+
 	void UpdateText() {
-		healthText.text = phone.GetComponent<Phone>().getHealth() + "/" + phone.GetComponent<Phone>().maxHealth + "hp";
+		healthText.text = phoneImage.GetComponent<Phone>().getHealth() + "/" + phoneImage.GetComponent<Phone>().maxHealth + "hp";
 		moneyText.text = "Money: " + money;
 	}
 
 	void UpdatePhone() {
-		phone.GetComponent<Phone>().setHealth(phones[selectedPhone].GetComponent<Phone>().getHealth());
-		phone.GetComponent<Phone>().maxHealth = phones[selectedPhone].GetComponent<Phone>().maxHealth;
-		phone.GetComponent<Phone>().value = phones[selectedPhone].GetComponent<Phone>().value;
-		phone.GetComponent<Image>().sprite = phones[selectedPhone].GetComponent<Phone>().image;
+		phoneImage.GetComponent<Phone>().setHealth(phones[selectedPhone].GetComponent<Phone>().getHealth());
+		phoneImage.GetComponent<Phone>().maxHealth = phones[selectedPhone].GetComponent<Phone>().maxHealth;
+		phoneImage.GetComponent<Phone>().value = phones[selectedPhone].GetComponent<Phone>().value;
+		phoneImage.GetComponent<Image>().sprite = phones[selectedPhone].GetComponent<Phone>().image;
+	}
+
+	public void AddMoney(int a) {
+		money += a;
+		UpdateText();
+	}
+
+	public bool RemoveMoney(int a) {
+		if(money - a >= 0) {
+			money -= a;
+			UpdateText();
+			return true;
+		}
+		else 
+			return false;
+	}
+
+	public void Damage(int a) {
+		phoneImage.GetComponent<Phone>().Damage(a);
+		UpdateText();
 	}
 
 	public void NextPhone() {
@@ -68,7 +96,7 @@ public class Game_Controller : MonoBehaviour {
 	}
 
 	public void Click() {
-		phone.GetComponent<Phone>().Damage(1, this);
+		Damage(1);
 		UpdateText();
 	}
 
