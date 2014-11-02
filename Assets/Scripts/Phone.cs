@@ -7,7 +7,7 @@ public class Phone : MonoBehaviour {
 	public Sprite image;
 	public int value;
 	public int maxHealth;
-	public int health;
+	public int health; 
 
 	void Start() {
 		health = maxHealth;
@@ -15,13 +15,14 @@ public class Phone : MonoBehaviour {
 
 	public void Damage(int a) {
 		health -= a;
-		if(health <= 0)
+		while(health <= 0) {
+			health += maxHealth;
 			OnDeath();
+		}
 	}
 
 	public void OnDeath() {
 		GameController.game.AddMoney(value);
-		Start();
 	}
 
 	public int getHealth() {
